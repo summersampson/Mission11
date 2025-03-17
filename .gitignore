@@ -1,0 +1,27 @@
+# Ignore Visual Studio files
+.vs/
+*.vs
+*.user
+*.suo
+
+# Node Modules
+node_modules/
+
+# Build and cache
+bin/
+obj/
+dist/
+
+# ASP.NET Config
+appsettings.json
+appsettings.Development.json
+
+# React Cache/Build
+build/
+
+# IDE & Editor Settings
+*.code-workspace
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
