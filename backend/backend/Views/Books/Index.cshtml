@@ -6,6 +6,23 @@
 
 <button id="sortButton" class="btn btn-primary mb-3">Sort by Title (A → Z)</button>
 
+<form method="get" action="@Url.Action("Index", "Books")" class="mb-3">
+    <label for="category">Filter by Category:</label>
+    <select name="category" id="category" onchange="this.form.submit()" class="form-select w-auto d-inline-block ms-2">
+        <option value="">All Categories</option>
+        <option value="Classic" selected="@(Model.CurrentCategory == "Classic")">Classic</option>
+        <option value="Biography" selected="@(Model.CurrentCategory == "Biography")">Biography</option>
+        <option value="Historical" selected="@(Model.CurrentCategory == "Historical")">Historical</option>
+        <option value="Self-Help" selected="@(Model.CurrentCategory == "Self-Help")">Self-Help</option>
+        <option value="Business" selected="@(Model.CurrentCategory == "Business")">Business</option>
+        <option value="Thrillers" selected="@(Model.CurrentCategory == "Thrillers")">Thrillers</option>
+        <option value="Christian Books" selected="@(Model.CurrentCategory == "Christian Books")">Christian Books</option>
+        <option value="Health" selected="@(Model.CurrentCategory == "Health")">Health</option>
+        <option value="Action" selected="@(Model.CurrentCategory == "Action")">Action</option>
+    </select>
+</form>
+
+
 <h1>Book List</h1>
 
 <!-- Add this container around your book cards -->
@@ -28,33 +45,36 @@
 <!-- Pagination Controls -->
 <div>
     <button disabled="@(Model.CurrentPage == 1)"
-            onclick="location.href='@Url.Action("Index", new { pageNum = Model.CurrentPage - 1, pageSize = Model.PageSize })'">
+            onclick="location.href='@Url.Action("Index", new { pageNum = Model.CurrentPage - 1, pageSize = Model.PageSize, category = Model.CurrentCategory })'">
         Previous
     </button>
 
+
     @for (var i = 1; i <= Model.TotalPages; i++)
     {
-        <button onclick="location.href='@Url.Action("Index", new { pageNum = i, pageSize = Model.PageSize })'"
+        <button onclick="location.href='@Url.Action("Index", new { pageNum = i, pageSize = Model.PageSize, category = Model.CurrentCategory })'"
                 disabled="@(Model.CurrentPage == i)">
             @i
         </button>
     }
 
+
     <button disabled="@(Model.CurrentPage == Model.TotalPages)"
-            onclick="location.href='@Url.Action("Index", new { pageNum = Model.CurrentPage + 1, pageSize = Model.PageSize })'">
+            onclick="location.href='@Url.Action("Index", new { pageNum = Model.CurrentPage + 1, pageSize = Model.PageSize, category = Model.CurrentCategory })'">
         Next
     </button>
+
 </div>
 
 <!-- Results Per Page Selector -->
 <br />
 <label>
     Results per page:
-    <select onchange="location.href='@Url.Action("Index", new { pageNum = 1, pageSize = "__value__" })'.replace('__value__', this.value)">
-        <option value="5" selected="@(Model.PageSize == 5)">5</option>
-        <option value="10" selected="@(Model.PageSize == 10)">10</option>
-        <option value="20" selected="@(Model.PageSize == 20)">20</option>
-    </select>
+        <select onchange="location.href='@Url.Action("Index", new { pageNum = 1, pageSize = "' + this.value + '", category = Model.CurrentCategory })'">
+            <option value="5" selected="@(Model.PageSize == 5)">5</option>
+            <option value="10" selected="@(Model.PageSize == 10)">10</option>
+            <option value="20" selected="@(Model.PageSize == 20)">20</option>
+        </select>
 </label>
 
 <script>
