@@ -22,23 +22,34 @@
     </select>
 </form>
 
-
 <h1>Book List</h1>
 
 <!-- Add this container around your book cards -->
 <div id="bookContainer">
-    @foreach (var book in Model.Books)
+    @if (Model.Books != null && Model.Books.Any())
     {
-        <div class="book-card card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@book.Title</h5>
-                <p class="card-text">
-                    <strong>Author:</strong> @book.Author<br />
-                    <strong>Publisher:</strong> @book.Publisher<br />
-                    <strong>Price:</strong> $@book.Price
-                </p>
+        @foreach (var book in Model.Books)
+        {
+            <div class="book-card card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
+                    <p class="card-text">
+                        <strong>Author:</strong> @book.Author<br />
+                        <strong>Publisher:</strong> @book.Publisher<br />
+                        <strong>Price:</strong> $@book.Price
+                    </p>
+                    <!-- Add Edit and Delete buttons here -->
+                    <div class="d-flex justify-content-between">
+                        <a href="@Url.Action("Edit", "Books", new { id = book.BookID })" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="@Url.Action("Delete", "Books", new { id = book.BookID })" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
             </div>
-        </div>
+        }
+    }
+    else
+    {
+        <p>No books available.</p>
     }
 </div>
 
@@ -49,7 +60,6 @@
         Previous
     </button>
 
-
     @for (var i = 1; i <= Model.TotalPages; i++)
     {
         <button onclick="location.href='@Url.Action("Index", new { pageNum = i, pageSize = Model.PageSize, category = Model.CurrentCategory })'"
@@ -57,7 +67,6 @@
             @i
         </button>
     }
-
 
     <button disabled="@(Model.CurrentPage == Model.TotalPages)"
             onclick="location.href='@Url.Action("Index", new { pageNum = Model.CurrentPage + 1, pageSize = Model.PageSize, category = Model.CurrentCategory })'">

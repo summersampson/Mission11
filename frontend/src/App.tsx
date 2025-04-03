@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import BookList from "./BookList";
 import Cart from "./Cart";
+import AdminBooks from "./AdminBooks"; // Import AdminBooks component
 import { CartProvider } from "./CartContext";
 
 const App: React.FC = () => {
@@ -20,6 +21,9 @@ const App: React.FC = () => {
               <Link className="btn btn-outline-success" to="/cart">
                 Cart
               </Link>
+              <Link className="btn btn-outline-danger ms-2" to="/adminbooks">
+                Admin
+              </Link>
             </div>
           </div>
         </nav>
@@ -27,6 +31,8 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<BookList />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/adminbooks" element={<AdminBooks />} />{" "}
+          {/* Add AdminBooks route */}
         </Routes>
       </Router>
     </CartProvider>
