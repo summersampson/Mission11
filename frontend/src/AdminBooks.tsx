@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getBooks, addBook, updateBook, deleteBook } from "./apis/ProjectAPIs";
 
 interface Book {
   bookID: number;
@@ -24,9 +25,9 @@ const AdminBooks: React.FC = () => {
   const [price, setPrice] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
 
+  // Load books on mount
   useEffect(() => {
-    fetch("/api/books")
-      .then((res) => res.json())
+    getBooks()
       .then((data) => {
         console.log("Fetched books:", data);
         setBooks(data);
@@ -58,15 +59,7 @@ const AdminBooks: React.FC = () => {
       price: parseFloat(price),
     };
 
-    fetch("/api/books", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newBook),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to add book");
-        return res.json();
-      })
+    addBook(newBook)
       .then((addedBook) => {
         setBooks([...books, addedBook]);
         resetForm();
@@ -89,12 +82,7 @@ const AdminBooks: React.FC = () => {
       price: parseFloat(price),
     };
 
-    fetch(`/api/books/${editingId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedBook),
-    })
-      .then((res) => res.json())
+    updateBook(editingId, updatedBook)
       .then((data) => {
         setBooks(books.map((b) => (b.bookID === editingId ? data : b)));
         resetForm();
@@ -103,9 +91,8 @@ const AdminBooks: React.FC = () => {
   };
 
   const handleDelete = (id: number) => {
-    fetch(`/api/books/${id}`, { method: "DELETE" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to delete");
+    deleteBook(id)
+      .then(() => {
         setBooks(books.filter((b) => b.bookID !== id));
       })
       .catch((err) => console.error("Delete error:", err));
